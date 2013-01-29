@@ -1,0 +1,17 @@
+javascript_compressor: closure
+source_maps: on
+source_maps_dir: maps
+compressor_options:
+  compilation_level: ADVANCED_OPTIMIZATIONS
+  source_map_format: V3
+embed_assets: on
+
+javascripts:
+  js_test:
+    - fixtures/src/*.js
+  jst_test:
+    - fixtures/src/*.jst
+
+stylesheets:
+  css_test:
+    - fixtures/src/*.css

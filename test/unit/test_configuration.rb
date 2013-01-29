@@ -21,7 +21,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert !Jammit.gzip_assets
     @compressor = Compressor.new
     # Should not compress js.
-    packed = @compressor.compress_js(glob('test/fixtures/src/*.js'))
+    packed = @compressor.compress_js(glob('test/fixtures/src/*.js'), 'uncompressed')
     assert_equal packed, File.read('test/fixtures/jammed/js_test-uncompressed.js')
     # Nothing should change with jst.
     packed = @compressor.compile_jst(glob('test/fixtures/src/*.jst'))
@@ -60,7 +60,7 @@ class ConfigurationTest < Test::Unit::TestCase
 
   def test_javascript_compression
     Jammit.load_configuration('test/config/assets.yml')
-    packed = Compressor.new.compress_js(glob('test/fixtures/src/*.js'))
+    packed = Compressor.new.compress_js(glob('test/fixtures/src/*.js'), 'compressedjs')
     assert_equal packed, File.read('test/fixtures/jammed/js_test.js')
   end
 
@@ -85,6 +85,12 @@ class ConfigurationTest < Test::Unit::TestCase
     assert !Jammit.rewrite_relative_paths
     packed = Compressor.new.compress_css(glob('test/fixtures/src/*.css'))
     assert_equal packed, File.read('test/fixtures/jammed/css_test-no-rewrite-relative-paths.css')
+  end
+
+  def test_source_maps_option
+    Jammit.load_configuration('test/config/assets-sourcemaps.yml')
+    assert Jammit.source_maps
+    assert_equal Jammit.source_maps_dir, 'maps'
   end
 
 end

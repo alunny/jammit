@@ -37,7 +37,7 @@ module Jammit
       mtime = @force ? Time.now : nil
 
       cacheable(:js, output_dir).each do |p|
-        cache(p, 'js', pack_javascripts(p), output_dir, nil, mtime)
+        cache(p, 'js', pack_javascripts(p, output_dir), output_dir, nil, mtime)
       end
 
       cacheable(:css, output_dir).each do |p|
@@ -87,8 +87,8 @@ module Jammit
     end
 
     # Return the compressed contents of a javascript package.
-    def pack_javascripts(package)
-      compressor.compress_js(package_for(package, :js)[:paths])
+    def pack_javascripts(package, output_dir = nil)
+      compressor.compress_js(package_for(package, :js)[:paths], package, output_dir)
     end
 
     # Return the compiled contents of a JST package.

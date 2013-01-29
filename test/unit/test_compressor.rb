@@ -8,7 +8,7 @@ class CompressorTest < Test::Unit::TestCase
   end
 
   def test_javascript_compression
-    packed   = @compressor.compress_js(glob('test/fixtures/src/*.js'))
+    packed   = @compressor.compress_js(glob('test/fixtures/src/*.js'), 'jsfiles')
     expected = File.read('test/fixtures/jammed/js_test.js')
     assert packed == expected, "packed: #{packed}\nexpected: #{expected}"
   end

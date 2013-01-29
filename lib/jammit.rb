@@ -55,7 +55,8 @@ module Jammit
                   :javascript_compressor, :compressor_options, :css_compressor,
                   :css_compressor_options, :template_extension,
                   :template_extension_matcher, :allow_debugging,
-                  :rewrite_relative_paths, :public_root
+                  :rewrite_relative_paths, :public_root,
+                  :source_maps, :source_maps_dir
     attr_accessor :javascript_compressors, :css_compressors
   end
 
@@ -88,8 +89,12 @@ module Jammit
     @gzip_assets            = !(conf[:gzip_assets] == false)
     @allow_debugging        = !(conf[:allow_debugging] == false)
     @mhtml_enabled          = @embed_assets && @embed_assets != "datauri"
+    @source_maps            = conf[:source_maps]
+    @source_maps_dir        = conf[:source_maps_dir]
+
     @compressor_options     = symbolize_keys(conf[:compressor_options] || {})
     @css_compressor_options = symbolize_keys(conf[:css_compressor_options] || {})
+
     set_javascript_compressor(conf[:javascript_compressor])
     set_css_compressor(conf[:css_compressor])
     set_package_assets(conf[:package_assets])
@@ -231,4 +236,5 @@ module Jammit
 
 end
 
+require 'bundler/setup'
 require 'jammit/dependencies'

@@ -12,7 +12,7 @@ class UglifierText < Test::Unit::TestCase
   end
 
   def test_javascript_compression
-    packed = @compressor.compress_js(glob('test/fixtures/src/*.js'))
+    packed = @compressor.compress_js(glob('test/fixtures/src/*.js'), 'uglified')
     assert_equal packed, File.read('test/fixtures/jammed/js_test-uglifier.js')
   end
 

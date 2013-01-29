@@ -1,7 +1,6 @@
 $: << File.expand_path(File.dirname(__FILE__) + "/..") ; require 'test_helper'
 
 class ClosureCompressorTest < Test::Unit::TestCase
-
   def setup
     Jammit.load_configuration('test/config/assets-closure.yml').reload!
     @compressor = Compressor.new
@@ -12,7 +11,7 @@ class ClosureCompressorTest < Test::Unit::TestCase
   end
 
   def test_javascript_compression
-    packed = @compressor.compress_js(glob('test/fixtures/src/*.js'))
+    packed = @compressor.compress_js(glob('test/fixtures/src/*.js'), 'fixtures')
     assert packed == File.read('test/fixtures/jammed/js_test-closure.js')
   end
 

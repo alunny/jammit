@@ -46,6 +46,11 @@ class CommandLineTest < Test::Unit::TestCase
       "#{ PRECACHED_FILES.first } mtime - #{ new_mtime } - greater than #{ mtime }"
   end
 
+  def test_generate_source_maps
+    system("#{ JAMMIT } -c test/config/assets-sourcemaps.yml -o test/precache -u http://www.example.com")
+    assert File.exist?("test/precache/maps/js_test.js.map"), "source map exists"
+  end
+
   def zlib_read(filename)
     Zlib::GzipReader.open(filename) {|f| f.read }
   end
