@@ -13,6 +13,7 @@ group :development, :test do
     :ref => "04845081e53265c5d76f7baebe22224e9dd9cfc1"
   gem "uglifier", "1.2.4"
   gem "sass", "~>3.2"
+  gem "multi_json", "~>1.0"
 end
 
 group :development do

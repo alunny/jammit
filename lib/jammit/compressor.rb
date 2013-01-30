@@ -81,20 +81,34 @@ module Jammit
     # Concatenate together a list of JavaScript paths, and pass them through the
     # YUI Compressor (with munging enabled). JST can optionally be included.
     def compress_js(paths, package_name, output_dir = nil)
-      if (jst_paths = paths.grep(Jammit.template_extension_matcher)).empty?
-        js = concatenate(paths)
-      else
-        js = concatenate(paths - jst_paths) + compile_jst(jst_paths)
-      end
+      jst_paths = paths.grep(Jammit.template_extension_matcher)
 
-      if Jammit.source_maps
+      if Jammit.source_maps && jst_paths.empty?
+        # NOTE: doesn't work with JST yet
+        output_file = File.join(output_dir, "#{ package_name }.js")
         map_dir = File.join(output_dir, Jammit.source_maps_dir)
         FileUtils.mkdir_p(map_dir)
         map_path = File.join(map_dir, "#{ package_name }.js.map")
-        @js_compressor.options[:create_source_map] = map_path
-      end
 
-      Jammit.compress_assets ? @js_compressor.compress(js) : js
+        @js_compressor.options[:create_source_map]  = map_path
+        @js_compressor.options[:js_output_file]     = output_file
+
+        # ASSUMPTION: source maps work better with relative path
+        @js_compressor.compile_files(paths.map { |f| f.split(Dir.getwd + '/')[1] })
+
+        @js_compressor.options.delete(:create_source_map)
+        @js_compressor.options.delete(:js_output_file)
+
+        File.read(output_file)
+      else
+        if jst_paths.empty?
+          js = concatenate(paths)
+        else
+          js = concatenate(paths - jst_paths) + compile_jst(jst_paths)
+        end
+
+        Jammit.compress_assets ? @js_compressor.compress(js) : js
+      end
     end
 
     # Concatenate and compress a list of CSS stylesheets. When compressing a

@@ -10,6 +10,7 @@ ENV['RAILS_ENV'] ||= "test"
 ENV["RAILS_ASSET_ID"] = "101"
 
 require './lib/jammit'
+require 'json'
 Jammit.load_configuration(Jammit::DEFAULT_CONFIG_PATH)
 
 def glob(g)

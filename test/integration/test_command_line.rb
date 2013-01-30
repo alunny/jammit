@@ -49,6 +49,11 @@ class CommandLineTest < Test::Unit::TestCase
   def test_generate_source_maps
     system("#{ JAMMIT } -c test/config/assets-sourcemaps.yml -o test/precache -u http://www.example.com")
     assert File.exist?("test/precache/maps/js_test.js.map"), "source map exists"
+
+    js_map = JSON.parse(File.read("test/precache/maps/js_test.js.map"))
+
+    assert_equal js_map["file"], "test/precache/js_test.js"
+    assert_equal js_map["sources"], ["test/fixtures/src/test1.js", "test/fixtures/src/test2.js"]
   end
 
   def zlib_read(filename)
